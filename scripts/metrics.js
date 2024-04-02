@@ -160,7 +160,7 @@ async function getGpuInfo() {
 
 async function getMemoryInfo() {
     const info = await si.mem()
-    const used = info.used
+    const used = info.active || info.used
     const total = info.total
     const load = (used / total) * 100
 
