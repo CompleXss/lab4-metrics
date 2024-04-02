@@ -1,0 +1,33 @@
+body {
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+hr {
+    max-width: 400px;
+    width: 80%;
+}
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+
+    padding: 12px 36px;
+    width: 200px;
+}
+
+input {
+    box-sizing: border-box;
+    margin-top: 2px;
+    margin-bottom: 20px;
+    padding: 6px;
+}
+
+input,
+button {
+    width: 100%;
+}

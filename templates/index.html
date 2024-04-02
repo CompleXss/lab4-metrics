@@ -9,11 +9,53 @@
 </head>
 
 <body>
-    <h1>Hello world!!</h1>
+    <div class="chartsContainer">
+        <h2 id="cpuName"> Процессор </h2>
+        <div id="cpuChart" class="chart"></div>
+        
+        <h2 id="gpuName"> Видеокарта </h2>
+        <div id="gpuChart" class="chart"></div>
+        
+        <h2 id="memName"> Оперативная память </h2>
+        <div id="memChart" class="chart"></div>
+    </div>
 
-    <div id="cpuChart"></div>
-    <div id="tempChart"></div>
+    <div class="settingsContainer">
+        <h2> Настройки </h2>
 
-    
+        <label for="metricsMode"> Временной интервал </label>
+        <select id="metricsMode" disabled>
+            <option value="0"> 1 минута </option>
+            <option value="1"> 1 час </option>
+            <option value="2"> 1 день </option>
+            <option value="3"> 1 неделя </option>
+        </select>
+
+        <fieldset>
+            <legend> Оповещать, когда значения превысят порог </legend>
+            <label> Загрузка процессора </label><br/>
+            <input id="cpuLoadLimit" type="number" min="0" max="101" value="0"><br/>
+
+            <label> Температура процессора </label><br/>
+            <input id="cpuTempLimit" type="number" min="0" max="101" value="0"><br/>
+
+            <label> Загрузка видеокарты </label><br/>
+            <input id="gpuLoadLimit" type="number" min="0" max="101" value="0"><br/>
+
+            <label> Температура видеокарты </label><br/>
+            <input id="gpuTempLimit" type="number" min="0" max="101" value="0"><br/>
+
+            <label> Использование оперативной памяти (%) </label><br/>
+            <input id="memLoadLimit" type="number" min="0" max="101" value="0"><br/>
+            
+            <hr/>
+
+            <label> Почта для оповещений о превышении порогов (необязательно) </label><br/>
+            <input id="logEmail" type="email" placeholder="mail@example.com"><br/>
+
+            <button id="updateSettingsBtn"> Подтвердить </button>
+
+        </fieldset>
+    </div>
 </body>
 </html>

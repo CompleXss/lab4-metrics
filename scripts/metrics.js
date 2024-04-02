@@ -49,6 +49,10 @@ export function getMetrics(mode) {
             gpuLoad: metricsData.gpuLoad.data_m.map(x => x.arr),
             gpuTemp: metricsData.gpuTemp.data_m.map(x => x.arr),
             memLoad: metricsData.memLoad.data_m.map(x => x.arr),
+            memInfo: {
+                maxLoad: metricsData.memLoad.max,
+                loadUnits: metricsData.memUnits,
+            },
         }
 
         case MODE.LAST_HOUR: return {
@@ -57,6 +61,10 @@ export function getMetrics(mode) {
             gpuLoad: metricsData.gpuLoad.data_h.map(x => x.arr),
             gpuTemp: metricsData.gpuTemp.data_h.map(x => x.arr),
             memLoad: metricsData.memLoad.data_h.map(x => x.arr),
+            memInfo: {
+                maxLoad: metricsData.memLoad.max,
+                loadUnits: metricsData.memUnits,
+            },
         }
 
         case MODE.LAST_DAY: return {
@@ -65,6 +73,10 @@ export function getMetrics(mode) {
             gpuLoad: metricsData.gpuLoad.data_d.map(x => x.arr),
             gpuTemp: metricsData.gpuTemp.data_d.map(x => x.arr),
             memLoad: metricsData.memLoad.data_d.map(x => x.arr),
+            memInfo: {
+                maxLoad: metricsData.memLoad.max,
+                loadUnits: metricsData.memUnits,
+            },
         }
 
         case MODE.LAST_WEEK: return {
@@ -73,6 +85,10 @@ export function getMetrics(mode) {
             gpuLoad: metricsData.gpuLoad.data_w.map(x => x.arr),
             gpuTemp: metricsData.gpuTemp.data_w.map(x => x.arr),
             memLoad: metricsData.memLoad.data_w.map(x => x.arr),
+            memInfo: {
+                maxLoad: metricsData.memLoad.max,
+                loadUnits: metricsData.memUnits,
+            },
         }
 
         default: return undefined
@@ -87,7 +103,7 @@ export async function updateMetrics() {
     metricsData.cpuLoad.appendValue(cpuInfo.load)
     metricsData.cpuTemp.appendValue(cpuInfo.temp)
 
-    metricsData.gpuLoad.appendValue(gpuInfo.temp)
+    metricsData.gpuLoad.appendValue(gpuInfo.load)
     metricsData.gpuTemp.appendValue(gpuInfo.temp)
 
     const [memTotal, memUnits] = formatBytesCount(memInfo.total)
@@ -128,12 +144,13 @@ async function getGpuInfo() {
         }
     }
 
+    // todo
     if (!temp) console.log('can not get gpu temp')
     if (!load) console.log('can not get gpu load')
 
     // windows "fix"
     temp ??= await getCpuTemperature()
-    load ??= Math.round(tryAgain(5, 15))
+    load ??= Math.round(tryAgain(10, 20))
 
     return {
         temp,
@@ -169,19 +186,24 @@ function tryAgain(min, max) {
 
 function formatBytesCount(bytes) {
     const kiloBytes = 1024
-    const gigaBytes = kiloBytes * 1024
+    const megaBytes = kiloBytes * 1024
+    const gigaBytes = megaBytes * 1024
     const teraBytes = gigaBytes * 1024
 
     if (bytes > teraBytes) {
-        return [bytes / teraBytes, ' TB']
+        return [(bytes / teraBytes).toFixed(2), ' TB']
     }
 
     if (bytes > gigaBytes) {
-        return [bytes / gigaBytes, ' GB']
+        return [(bytes / gigaBytes).toFixed(2), ' GB']
+    }
+
+    if (bytes > megaBytes) {
+        return [(bytes / megaBytes).toFixed(2), ' MB']
     }
     
     if (bytes > kiloBytes) {
-        return [bytes / kiloBytes, ' KB']
+        return [(bytes / kiloBytes).toFixed(2), ' KB']
     }
     
     return [bytes, ' B']

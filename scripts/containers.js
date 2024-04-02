@@ -30,17 +30,31 @@ class Metric {
     }
 }
 
+function getDefaults(num, step) {
+    const arr = []
+    let date = new Date().getTime() - step * num
+
+    for (let i = 0; i < num; i++) {
+        arr.push(new Metric(date, 0))
+        date += step
+    }
+    
+    return arr
+}
+
 class MetricsData {
     constructor(min, max) {
-        this.data_m = []
-        this.data_h = []
-        this.data_d = []
-        this.data_w = []
+        this.data_m = getDefaults(60, 1000)
+        this.data_h = getDefaults(60, 1000 * 60)
+        this.data_d = getDefaults(24, 1000 * 60 * 60)
+        this.data_w = getDefaults(7, 1000 * 60 * 60 * 24)
         this.min = min
         this.max = max
     }
 
     appendValue(value) {
+        value = Number(value)
+
         const date = new Date().getTime()
         const secondMultiplier = 1000
         const minuteMultiplier = secondMultiplier * 60
@@ -62,7 +76,7 @@ class MetricsData {
         const lastEntry = destination.length > 0 && destination[destination.length - 1]
 
         if (lastEntry && lastEntry.date() === date) {
-            lastEntry.setValue((lastEntry.value() * lastEntry.count++ + value) / lastEntry.count)
+            lastEntry.setValue(Math.ceil(((lastEntry.value() * lastEntry.count++ + value) / lastEntry.count) * 100) / 100)
         }
         else {
             destination.push(new Metric(date, value))
@@ -79,17 +93,19 @@ export const metricsData = {
     cpuTemp: new MetricsData(0, 100),
     gpuLoad: new MetricsData(0, 100),
     gpuTemp: new MetricsData(0, 100),
-    memLoad: new MetricsData(0, 100), // subject to change
+    memLoad: new MetricsData(0, 100),
     memUnits: ' B',
 }
 
 export const criticalLimits = {
-    cpuLoad: 80,
-    cpuTemp: 80,
-    gpuLoad: 80,
-    gpuTemp: 80,
-    memLoad: 80,
+    cpuLoad: 101,
+    cpuTemp: 101,
+    gpuLoad: 101,
+    gpuTemp: 101,
+    memLoad: 101,
 }
 
-export var logEmail = undefined;
-export var metricsMode = MODE.LAST_MINUTE;
+export const data = {
+    logEmail: undefined,
+    metricsMode: MODE.LAST_MINUTE,
+}

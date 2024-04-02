@@ -1,9 +1,8 @@
-import { criticalLimits, logEmail } from './containers.js'
+import { criticalLimits, data } from './containers.js'
 import { getProcesses } from './metrics.js'
 import { getDate } from './utils.js'
+import { openConnection } from './database.js'
 import Queue from 'queue'
-import sqlite3 from 'sqlite3'
-import { open } from 'sqlite'
 import nodemailer from 'nodemailer'
 
 const emailUser = 'mp.maksim30@gmail.com'
@@ -23,13 +22,6 @@ const emailTransporter = nodemailer.createTransport({
     }
 })
 
-function openConnection() {
-    return open({
-        filename: './logs.db',
-        driver: sqlite3.Database
-    })
-}
-
 
 
 export function logIfAboveCriticalLimits(info) {
@@ -43,7 +35,7 @@ export function logIfAboveCriticalLimits(info) {
 
     if (message !== '') {
         logToDB(message)
-        sendEmail(message, logEmail)
+        sendEmail(message, data.logEmail)
     }
 }
 

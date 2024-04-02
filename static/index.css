@@ -1,4 +1,50 @@
-h1 {
-    color: red;
-    font-family: 'Courier New', Courier, monospace;
+body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    margin-left: 24px;
+    margin-right: 24px;
+}
+
+h2 {
+    margin-top: 40px;
+}
+
+
+
+.chart {
+    margin: 12px 6px;
+    width: 700px;
+
+    border: 1px solid black;
+    border-radius: 6px;
+}
+
+
+
+.settingsContainer {
+    margin-left: 80px;
+}
+
+label {
+    margin-right: 12px;
+}
+
+select {
+    min-width: 120px;
+}
+
+
+
+fieldset {
+    margin-top: 40px;
+    padding-top: 20px;
+
+    border-radius: 6px;
+}
+
+fieldset input {
+    min-width: 200px;
+    margin-bottom: 20px;
 }
